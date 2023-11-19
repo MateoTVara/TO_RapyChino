@@ -3,6 +3,7 @@ package com.idat.pe.controller;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.idat.pe.model.Producto;
@@ -19,7 +20,8 @@ public class ProductoController {
 	private ProductoService productoService;
 	
 	@GetMapping("")
-	public String show() {
+	public String show(Model model) {
+		model.addAttribute("productos",productoService.findAll());
 		return "productos/show";
 	}
 	
