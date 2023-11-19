@@ -1,5 +1,7 @@
 package com.idat.pe.controller;
 
+import java.util.Optional;
+
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +27,7 @@ public class ProductoController {
 		return "productos/show";
 	}
 	
-	@GetMapping("create")
+	@GetMapping("/create")
 	public String create() {
 		return "productos/create";
 	}
@@ -37,6 +39,31 @@ public class ProductoController {
 		Usuario u = new Usuario(1,"","","","","","","");
 		producto.setUsuario(u);
 		productoService.save(producto);
+		return "redirect:/productos";
+	}
+	
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable Integer id, Model model) {
+		
+		Producto producto = new Producto();
+		Optional<Producto> optionalProducto = productoService.get(id);
+		producto= optionalProducto.get();
+		
+		LOGGER.info("Producto buscado: {}", producto);
+		model.addAttribute("producto", producto);
+		
+		return "productos/edit";
+	}
+	
+	@PostMapping("/update")
+	public String update(Producto producto ) {
+		productoService.update(producto);
+		return "redirect:/productos";
+	}
+	
+	@GetMapping("/delete/{id}")
+	public String delete(@PathVariable Integer id) {
+		productoService.delete(id);
 		return "redirect:/productos";
 	}
 	
