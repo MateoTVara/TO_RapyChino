@@ -1,14 +1,24 @@
 package com.idat.pe.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="detalles")
 public class DetallePedido {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nombre;
 	private double cantidad;
 	private double precio;
 	private double total;
 	
+	@ManyToOne
+	private Pedido pedido;
 	
+	@ManyToOne
+	private Producto producto;
 	
 	public DetallePedido() {
 		super();
@@ -50,6 +60,18 @@ public class DetallePedido {
 	}
 	public void setTotal(double total) {
 		this.total = total;
+	}
+	public Pedido getPedido() {
+		return pedido;
+	}
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
+	}
+	public Producto getProducto() {
+		return producto;
+	}
+	public void setProducto(Producto producto) {
+		this.producto = producto;
 	}
 	@Override
 	public String toString() {
