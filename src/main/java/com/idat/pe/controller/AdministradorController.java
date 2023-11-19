@@ -1,4 +1,4 @@
-package com.idat.pe.control;
+package com.idat.pe.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
