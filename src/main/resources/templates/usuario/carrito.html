@@ -55,12 +55,12 @@
 							</thead>
 							<tbody>
 								<tr th:each="dpedido:${carrito}">
-									<td th:text="${dpedido.nombre}"></td>
-									<td th:text="${dpedido.precio}"></td>
-									<td th:text="${dpedido.cantidad}"></td>
-									<td th:text="${dpedido.total}"></td>
-									<td><a th:href="@{/delete/carrito/{id}   (id=${dpedido.producto.id}) }" class="btn btn-danger">Quitar</a></td>
-								</tr>
+							        <td th:text="${dpedido.nombre}"></td>
+							        <td th:text="${#numbers.formatDecimal(dpedido.precio, 2, 2)}"></td>
+							        <td th:text="${dpedido.cantidad}"></td>
+							        <td th:text="${#numbers.formatDecimal(dpedido.total, 2, 2)}"></td>
+							        <td><a th:href="@{/delete/carrito/{id} (id=${dpedido.producto.id}) }" class="btn btn-danger">Quitar</a></td>
+							    </tr>
 							</tbody>
 						</table>
 					</div>

@@ -1,5 +1,6 @@
 package com.idat.pe.controller;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -69,7 +70,10 @@ public class HomeController {
 		
 		sumaTotal=detalles.stream().mapToDouble(dt->dt.getTotal()).sum();
 		
-		pedido.setTotal(sumaTotal);
+		DecimalFormat df = new DecimalFormat("#.00");
+	    String formattedTotal = df.format(sumaTotal);
+
+	    pedido.setTotal(Double.parseDouble(formattedTotal));
 		model.addAttribute("carrito",detalles);
 		model.addAttribute("pedido",pedido);
 		
@@ -95,7 +99,10 @@ public class HomeController {
 		double sumaTotal = 0;
 		sumaTotal = detalles.stream().mapToDouble(dt -> dt.getTotal()).sum();
 
-		pedido.setTotal(sumaTotal);
+		DecimalFormat df = new DecimalFormat("#.00");
+	    String formattedTotal = df.format(sumaTotal);
+
+	    pedido.setTotal(Double.parseDouble(formattedTotal));
 		model.addAttribute("carrito", detalles);
 		model.addAttribute("pedido", pedido);
 
