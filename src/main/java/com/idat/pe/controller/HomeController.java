@@ -27,7 +27,7 @@ public class HomeController {
 	
 	List<DetallePedido> detalles= new ArrayList<DetallePedido>();
 
-	// datos de la orden
+	// datos de la pedido
 	Pedido pedido= new Pedido();
 
 	@GetMapping("")
@@ -77,4 +77,31 @@ public class HomeController {
 		return "usuario/carrito";
 	}
 	
+	@GetMapping("/delete/carrito/{id}")
+	public String deleteProductoCart(@PathVariable Integer id, Model model) {
+
+		// lista nueva de prodcutos
+		List<DetallePedido> pedidosNueva = new ArrayList<DetallePedido>();
+
+		for (DetallePedido detallePedido : detalles) {
+			if (detallePedido.getProducto().getId() != id) {
+				pedidosNueva.add(detallePedido);
+			}
+		}
+
+		// poner la nueva lista con los productos restantes
+		detalles = pedidosNueva;
+
+		double sumaTotal = 0;
+		sumaTotal = detalles.stream().mapToDouble(dt -> dt.getTotal()).sum();
+
+		pedido.setTotal(sumaTotal);
+		model.addAttribute("carrito", detalles);
+		model.addAttribute("pedido", pedido);
+
+
+
+		return "usuario/carrito";
+	
+	}
 }
