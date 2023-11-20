@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import com.idat.pe.model.DetallePedido;
 import com.idat.pe.model.Pedido;
 import com.idat.pe.model.Producto;
+import com.idat.pe.model.Usuario;
+import com.idat.pe.service.IUsuarioService;
 import com.idat.pe.service.ProductoService;
 
 @Controller
@@ -25,6 +27,9 @@ public class HomeController {
 	
 	@Autowired
 	private ProductoService productoService;
+	
+	@Autowired
+	private IUsuarioService usuarioService;
 	
 	List<DetallePedido> detalles= new ArrayList<DetallePedido>();
 
@@ -124,6 +129,18 @@ public class HomeController {
 		model.addAttribute("pedido", pedido);
 		
 		return "/usuario/carrito";
+	}
+	
+	@GetMapping("/pedido")
+	public String order(Model model) {
+		
+		Usuario usuario=usuarioService.findById(1).get();
+		
+		model.addAttribute("carrito", detalles);
+		model.addAttribute("pedido", pedido);
+		model.addAttribute("usuario",usuario);
+		
+		return "usuario/resumenorden";
 	}
 	
 }
