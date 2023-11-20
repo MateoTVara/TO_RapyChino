@@ -2,6 +2,7 @@ package com.idat.pe.controller;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,9 @@ import com.idat.pe.model.Pedido;
 import com.idat.pe.model.Producto;
 import com.idat.pe.model.Usuario;
 import com.idat.pe.service.IUsuarioService;
-import com.idat.pe.service.ProductoService;
+import com.idat.pe.service.IDetallePedidoService;
+import com.idat.pe.service.IPedidoService;
+import com.idat.pe.service.IProductoService;
 
 @Controller
 @RequestMapping("/")
@@ -26,10 +29,16 @@ public class HomeController {
 	private final Logger log=LoggerFactory.getLogger(HomeController.class);
 	
 	@Autowired
-	private ProductoService productoService;
+	private IProductoService productoService;
 	
 	@Autowired
 	private IUsuarioService usuarioService;
+	
+	@Autowired
+	private IPedidoService pedidoService;
+	
+	@Autowired
+	private IDetallePedidoService detallePedidoService;
 	
 	List<DetallePedido> detalles= new ArrayList<DetallePedido>();
 
@@ -141,6 +150,29 @@ public class HomeController {
 		model.addAttribute("usuario",usuario);
 		
 		return "usuario/resumenorden";
+	}
+	
+	@GetMapping("/savePedido")
+	public String savePedido(){
+		
+		Date fechaCreacion=new Date();
+		pedido.setFechaCreacion(fechaCreacion);
+		pedido.setNumero(pedidoService.generarNumeroPedido());
+		
+		Usuario usuario=usuarioService.findById(1).get();
+		
+		pedido.setUsuario(usuario);
+		pedidoService.save(pedido);
+		
+		for(DetallePedido dt:detalles) {
+			dt.setPedido(pedido);
+			detallePedidoService.save(dt);
+		}
+		
+		pedido = new Pedido();
+		detalles.clear();
+		
+		return"redirect:/";
 	}
 	
 }

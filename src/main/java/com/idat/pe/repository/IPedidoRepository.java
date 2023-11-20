@@ -3,11 +3,9 @@ package com.idat.pe.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.idat.pe.model.Producto;
+import com.idat.pe.model.Pedido;
 
 @Repository
-public interface ProductoRepository extends JpaRepository<Producto, Integer>{
-	
-	
-	
+public interface IPedidoRepository extends JpaRepository<Pedido, Integer>{
+
 }

@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.idat.pe.model.Producto;
 import com.idat.pe.model.Usuario;
-import com.idat.pe.service.ProductoService;
+import com.idat.pe.service.IProductoService;
 import com.idat.pe.service.SubirArchivoService;
 
 @Controller
@@ -22,7 +22,7 @@ public class ProductoController {
 	private final Logger LOGGER = LoggerFactory.getLogger(ProductoController.class);
 	
 	@Autowired
-	private ProductoService productoService;
+	private IProductoService productoService;
 	
 	@Autowired
 	private SubirArchivoService upload;
