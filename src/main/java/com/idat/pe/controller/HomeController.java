@@ -1,5 +1,7 @@
 package com.idat.pe.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.idat.pe.model.DetallePedido;
+import com.idat.pe.model.Pedido;
 import com.idat.pe.model.Producto;
 import com.idat.pe.service.ProductoService;
 
@@ -20,6 +24,11 @@ public class HomeController {
 	
 	@Autowired
 	private ProductoService productoService;
+	
+	List<DetallePedido> detalles= new ArrayList<DetallePedido>();
+
+	// datos de la orden
+	Pedido pedido= new Pedido();
 
 	@GetMapping("")
 	public String home(Model model) {
@@ -38,5 +47,34 @@ public class HomeController {
 		model.addAttribute("producto",producto);
 		
 		return "usuario/productoHome";	}
+	
+	@PostMapping("/carrito")
+	public String addCart(@RequestParam Integer id, @RequestParam Integer cantidad, Model model) {
+		DetallePedido detallePedido = new DetallePedido();
+		Producto producto = new Producto();
+		double sumaTotal =0;
+
+		Optional<Producto> optionalProducto = productoService.get(id);
+		log.info("Producto añadido: {}", optionalProducto.get());
+		log.info("Cantidad: {}", cantidad);
+		producto=optionalProducto.get();
+		
+		detallePedido.setCantidad(cantidad);
+		detallePedido.setPrecio(producto.getPrecio());
+		detallePedido.setNombre(producto.getNombre());
+		detallePedido.setTotal(producto.getPrecio()*cantidad);
+		detallePedido.setProducto(producto);
+		
+		detalles.add(detallePedido);
+		
+		sumaTotal=detalles.stream().mapToDouble(dt->dt.getTotal()).sum();
+		
+		pedido.setTotal(sumaTotal);
+		model.addAttribute("carrito",detalles);
+		model.addAttribute("pedido",pedido);
+		
+
+		return "usuario/carrito";
+	}
 	
 }
