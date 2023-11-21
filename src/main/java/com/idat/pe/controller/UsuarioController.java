@@ -1,5 +1,6 @@
 package com.idat.pe.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.idat.pe.model.Pedido;
 import com.idat.pe.model.Usuario;
+import com.idat.pe.service.IPedidoService;
 import com.idat.pe.service.IUsuarioService;
 
 import jakarta.servlet.http.HttpSession;
@@ -22,6 +25,9 @@ public class UsuarioController {
 
 	@Autowired
 	private IUsuarioService usuarioService;
+	
+	@Autowired
+	private IPedidoService pedidoService;
 	
 	private final Logger logger= LoggerFactory.getLogger(UsuarioController.class);
 	
@@ -67,6 +73,13 @@ public class UsuarioController {
 	@GetMapping("/compras")
 	public String obtenerCompras(Model model, HttpSession session) {
 		model.addAttribute("sesion", session.getAttribute("idusuario"));
+
+		Usuario usuario= usuarioService.findById(  Integer.parseInt(session.getAttribute("idusuario").toString()) ).get();
+		List<Pedido> pedidos= pedidoService.findByUsuario(usuario);
+		logger.info("pedidos {}", pedidos);
+
+		model.addAttribute("pedidos", pedidos);
+
 		return "usuario/compras";
 	}
 	

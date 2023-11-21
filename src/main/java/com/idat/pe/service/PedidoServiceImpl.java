@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.idat.pe.model.Pedido;
+import com.idat.pe.model.Usuario;
 import com.idat.pe.repository.IPedidoRepository;
 
 @Service
@@ -59,6 +60,11 @@ public class PedidoServiceImpl implements IPedidoService{
 		}
 		
 		return numeroConcat;
+	}
+
+	@Override
+	public List<Pedido> findByUsuario(Usuario usuario) {
+		return pedidoRepository.findByUsuario(usuario);
 	}
 
 }
