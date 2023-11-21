@@ -19,6 +19,9 @@ import com.idat.pe.model.Pedido;
 import com.idat.pe.model.Producto;
 import com.idat.pe.model.Usuario;
 import com.idat.pe.service.IUsuarioService;
+
+import jakarta.servlet.http.HttpSession;
+
 import com.idat.pe.service.IDetallePedidoService;
 import com.idat.pe.service.IPedidoService;
 import com.idat.pe.service.IProductoService;
@@ -47,9 +50,13 @@ public class HomeController {
 	Pedido pedido= new Pedido();
 
 	@GetMapping("")
-	public String home(Model model) {
+	public String home(Model model, HttpSession session) {
+		
+		log.info("Sesion del usuario: {}", session.getAttribute("name"));
 		model.addAttribute("productos", productoService.findAll());
 		return "usuario/home";
+		
+		
 	}
 	
 	@GetMapping("productoHome/{id}")
@@ -142,9 +149,10 @@ public class HomeController {
 	}
 	
 	@GetMapping("/pedido")
-	public String order(Model model) {
+	public String order(Model model, HttpSession session) {
 		
-		Usuario usuario=usuarioService.findById(1).get();
+		Usuario usuario=usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
+		
 		
 		model.addAttribute("carrito", detalles);
 		model.addAttribute("pedido", pedido);
@@ -154,13 +162,13 @@ public class HomeController {
 	}
 	
 	@GetMapping("/savePedido")
-	public String savePedido(){
+	public String savePedido(HttpSession session){
 		
 		Date fechaCreacion=new Date();
 		pedido.setFechaCreacion(fechaCreacion);
 		pedido.setNumero(pedidoService.generarNumeroPedido());
 		
-		Usuario usuario=usuarioService.findById(1).get();
+		Usuario usuario=usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
 		
 		pedido.setUsuario(usuario);
 		pedidoService.save(pedido);
