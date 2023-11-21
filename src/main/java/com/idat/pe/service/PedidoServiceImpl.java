@@ -2,6 +2,7 @@ package com.idat.pe.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,6 +66,11 @@ public class PedidoServiceImpl implements IPedidoService{
 	@Override
 	public List<Pedido> findByUsuario(Usuario usuario) {
 		return pedidoRepository.findByUsuario(usuario);
+	}
+
+	@Override
+	public Optional<Pedido> findById(Integer id) {
+		return pedidoRepository.findById(id);
 	}
 
 }
