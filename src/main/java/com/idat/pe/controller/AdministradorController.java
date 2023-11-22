@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.idat.pe.model.Producto;
 import com.idat.pe.service.IProductoService;
+import com.idat.pe.service.IUsuarioService;
 
 @Controller
 @RequestMapping("/administrador")
@@ -17,6 +18,9 @@ public class AdministradorController {
 
 	@Autowired
 	private IProductoService productoService;
+	
+	@Autowired
+	private IUsuarioService usuarioService;
 
 	@GetMapping("")
 	public String home(Model model) {
@@ -27,5 +31,10 @@ public class AdministradorController {
 		return "administrador/home";
 	}
 	
+	@GetMapping("/usuarios")
+	public String usuario(Model model) {
+		model.addAttribute("usuarios", usuarioService.findAll());
+		return "administrador/usuarios";
+	}
 	
 }
