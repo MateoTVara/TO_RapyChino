@@ -11,23 +11,19 @@
   <title>Spring eCommerce</title>
 
 
-  <!-- Bootstrap core CSS -->
+    <!-- Bootstrap core CSS -->
 <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}"
 	rel="stylesheet">
 
-<!-- Custom styles for this template -->
+<!-- Custom styles for this plantilla -->
 <link th:href="@{/css/heroic-features.css}" rel="stylesheet">
 
 </head>
 
 <body>
 
-  <!-- Navigation -->
-  <div th:include="usuario/plantilla_usuario.html::header" th:if="${sesion==null}">	
-	</div>
-
-	<div th:include="usuario/plantilla_usuario.html::header-user" th:unless="${sesion==null}"> </div>
-
+    <!-- Navigation -->
+  <div th:include="administrador/plantilla_administrador.html::header"></div>
 
     <!-- Page Content -->
     <div class="container">
@@ -39,8 +35,8 @@
       </h1>
 
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-        <li class="breadcrumb-item"><a th:href="@{/usuario/compras}">Compras</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="compras.html">Compras</a></li>
         <li class="breadcrumb-item active">Detalle de Compra</li>
       </ol>
 
@@ -60,8 +56,8 @@
               </thead>
               <tbody>
                 <tr th:each="detalle:${detalles}">
-                  <td  th:text="${detalle.cantidad}"></td>
-                  <td th:text="${detalle.nombre}"></td>
+                  <td th:text="${detalle.cantidad}"></td>
+                  <td th:text="${detalle.nombre}">Producto</td>
                   <td th:text="${#numbers.formatDecimal(detalle.precio, 2, 2)}"></td>
                   <td th:text="${#numbers.formatDecimal(detalle.total, 2, 2)}"></td>
                 </tr>
@@ -75,12 +71,13 @@
   <!-- /.container -->
 
   <!-- Footer -->
-  <!-- Footer -->
-	<div th:include="usuario/plantilla_usuario.html::footer"></div>
+<div th:include="administrador/plantilla_administrador.html::footer"></div>
 
 	<!-- Bootstrap core JavaScript -->
 	<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 	<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
 </body>
 
 </html>
+
