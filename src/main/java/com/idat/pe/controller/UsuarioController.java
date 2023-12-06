@@ -24,14 +24,16 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/usuario")
 public class UsuarioController {
 
+private final Logger logger= LoggerFactory.getLogger(UsuarioController.class);
+	
 	@Autowired
 	private IUsuarioService usuarioService;
 	
 	@Autowired
-	private IPedidoService pedidoService;
+	private IPedidoService ordenService;
 	
-	private final Logger logger= LoggerFactory.getLogger(UsuarioController.class);
 	
+	// /usuario/registro
 	@GetMapping("/registro")
 	public String create() {
 		return "usuario/registro";
@@ -53,12 +55,13 @@ public class UsuarioController {
 	@PostMapping("/acceder")
 	public String acceder(Usuario usuario, HttpSession session) {
 		logger.info("Accesos : {}", usuario);
-
+		
 		Optional<Usuario> user=usuarioService.findByEmail(usuario.getEmail());
 		//logger.info("Usuario de db: {}", user.get());
-
+		
 		if (user.isPresent()) {
 			session.setAttribute("idusuario", user.get().getId());
+			
 			if (user.get().getTipo().equals("ADMIN")) {
 				return "redirect:/administrador";
 			}else {
@@ -67,31 +70,31 @@ public class UsuarioController {
 		}else {
 			logger.info("Usuario no existe");
 		}
-
+		
 		return "redirect:/";
 	}
 	
 	@GetMapping("/compras")
 	public String obtenerCompras(Model model, HttpSession session) {
 		model.addAttribute("sesion", session.getAttribute("idusuario"));
-
+		
 		Usuario usuario= usuarioService.findById(  Integer.parseInt(session.getAttribute("idusuario").toString()) ).get();
-		List<Pedido> pedidos= pedidoService.findByUsuario(usuario);
+		List<Pedido> pedidos= ordenService.findByUsuario(usuario);
 		logger.info("pedidos {}", pedidos);
-
+		
 		model.addAttribute("pedidos", pedidos);
-
+		
 		return "usuario/compras";
 	}
 	
 	@GetMapping("/detalle/{id}")
 	public String detalleCompra(@PathVariable Integer id, HttpSession session, Model model) {
-		logger.info("Id del pedido: {}", id);
-		Optional<Pedido> pedido=pedidoService.findById(id);
-
+		logger.info("Id de la pedido: {}", id);
+		Optional<Pedido> pedido=ordenService.findById(id);
+		
 		model.addAttribute("detalles", pedido.get().getDetalle());
-
-
+		
+		
 		//session
 		model.addAttribute("sesion", session.getAttribute("idusuario"));
 		return "usuario/detallecompra";
